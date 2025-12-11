@@ -19,8 +19,16 @@ public class Board {
         }
     }
 
-    public void placeStone(Point point, Stone stone) {
+    public boolean isEmpty(Point point) {
+        return grid[point.x()][point.y()] == Stone.NONE;
+    }
+
+    public MoveResult placeStone(Point point, Stone stone) {
+        if(!isEmpty(point)) {
+            return MoveResult.OCCUPIED;
+        }
         grid[point.x()][point.y()] = stone;
+        return MoveResult.OK;
     }
 
     public String toAscii() {
@@ -38,11 +46,11 @@ public class Board {
             for (int x = 0; x < size; x++) {
                 Stone color = grid[x][y];
                 String symbol =
-                        color == Stone.BLACK ? "B" : color == Stone.WHITE ? "W" : "+";
+                        color == Stone.BLACK ? "B" :
+                        color == Stone.WHITE ? "W" : "+";
 
                 stringBuilder.append(String.format("%-3s", symbol));
             }
-
             stringBuilder.append("\n");
         }
 

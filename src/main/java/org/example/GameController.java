@@ -12,9 +12,14 @@ public class GameController {
         return currentPlayer;
     }
 
-    public void playMove(Point point) {
-        board.placeStone(point, currentPlayer);
-        currentPlayer = currentPlayer.opposite();
+    public MoveResult playMove(Point point) {
+        MoveResult result = board.placeStone(point, currentPlayer);
+
+        if(result == MoveResult.OK) {
+            currentPlayer = currentPlayer.opposite();
+        }
+        return result; // zamiast board.placeStone(point, currentPlayer); bo wczesniej typ byl void zamiast MoveResult
+
     }
 
     public String getBoardAscii() {
@@ -22,6 +27,6 @@ public class GameController {
     }
 }
 // Dodać:
-// - sprawdzenie czy pole wolne
+// - sprawdzenie czy pole wolne - ZROBIONE
 // - liczenie oddechów
 // - usuwanie zbitych kamieni

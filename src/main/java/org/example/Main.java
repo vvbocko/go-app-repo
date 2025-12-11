@@ -20,7 +20,14 @@ public class Main {
                 continue;
             }
 
-            gameController.playMove(p);
+            MoveResult result = gameController.playMove(p);
+
+            if(result == MoveResult.OCCUPIED)
+            {
+                System.out.println("Error: wybrane pole jest zajęte");
+                continue;
+            }
+
             System.out.println(gameController.getBoardAscii());
         }
     }
