@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class Client implements Runnable{
+public class Client {
     Socket socket;
     BufferedReader in;
     PrintWriter out;
@@ -28,9 +28,10 @@ public class Client implements Runnable{
         }
     }
     private void send(){
-        
+
     }
     private void receive(){
         
     }
+
 }

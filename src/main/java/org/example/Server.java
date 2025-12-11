@@ -18,7 +18,7 @@ public class Server {
                 Socket secondPlayer = serverSocket.accept();
                 System.out.println("Second player connected");
 
-                MessageExchange g = new MessageExchange(firstPlayer, secondPlayer);
+                //MessageExchange g = new MessageExchange(firstPlayer, secondPlayer);
                 Thread gTh = new Thread(g);
                 gTh.start();
 
