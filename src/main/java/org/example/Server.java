@@ -19,8 +19,8 @@ public class Server {
                 System.out.println("Second player connected");
 
                 //MessageExchange g = new MessageExchange(firstPlayer, secondPlayer);
-                Thread gTh = new Thread(g);
-                gTh.start();
+                //Thread gTh = new Thread(g);
+                //gTh.start();
 
                 //Musi byc dokldnie dwoch klientow
 
