@@ -106,6 +106,26 @@ public class Board {
             return MoveResult.OCCUPIED;
         }
         grid[point.x()][point.y()] = stone;
+        Stone enemyColor = stone.opposite();
+
+        List<List<Point>> enemyGroup = new ArrayList<>();
+        for (Point n : getNeighbours(point)) {
+            if(grid[n.x()][n.y()] == enemyColor) {
+                enemyGroup.add(getGroup(n));
+            }
+        }
+
+        List<List<Point>> enemyGroupToKill = new ArrayList<>();
+        for (List<Point> enemies : enemyGroup) {
+            if(countBreaths(enemies) == 0) {
+                enemyGroupToKill.add(enemies);
+            }
+        }
+
+        for (List<Point> enemiesToKill : enemyGroupToKill) {
+            removeGroup(enemiesToKill);
+        }
+
         return MoveResult.OK;
     }
 
