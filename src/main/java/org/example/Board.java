@@ -1,9 +1,6 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Board {
     private final Stone[][] grid;
@@ -83,6 +80,25 @@ public class Board {
 
         }
         return group;
+    }
+
+    private int countBreaths(List<Point> group) {
+        Set<Point> breaths = new HashSet<>(); // biore Set bo jako zbiór bedzie ignorował duplikaty
+
+        for (Point points : group) {
+            for (Point n : getNeighbours(points)) {
+                if (grid[n.x()][n.y()] == Stone.NONE) { // jak sąsiad jest pusty - dodaj oddech
+                    breaths.add(n);
+                }
+            }
+        }
+        return breaths.size();
+    }
+
+    private void removeGroup(List<Point> group) {
+        for (Point points : group) {
+            grid[points.x()][points.y()] = Stone.NONE;
+        }
     }
 
     public MoveResult placeStone(Point point, Stone stone) {
