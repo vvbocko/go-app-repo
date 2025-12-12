@@ -9,30 +9,30 @@ public class NetworkGameBridge {
         this.gameController = gameController;
     }
 
+    public GameController getGameController(){
+        return gameController;
+    }
+
     public void handleClientInput(ClientHandler handler, String message) {
-        // tu trzeba to uzupełnić
         Point p = parsePoint(message, gameController.getBoard().getSize());
 
         if (p == null) {
             handler.sendToClient("INVALID: wrong format (try A1)");
             return;
         }
-        PlayerColor color = handler.stoneColor;
+        Stone color = handler.stoneColor;
         Move move = new Move(p.x(), p.y(), color);
 
-        boolean ok = gameController.processMoveFromNetwork(move.getX(), move.getY(), move.getColor());
-
-        if (ok) {
-            String colorInfo;
-            if (color == PlayerColor.BLACK){
-                colorInfo="Black";
-            }
-            else {
-                colorInfo = "White";
-            }
-            handler.sendToClient("OK: " + colorInfo + " made move: " + message);
-        } else {
-            handler.sendToClient("INVALID: ruch niemożliwy");
+        MoveResult result = gameController.playMove(move);
+        if(result == MoveResult.OK) {
+            handler.sendToClient("OK: " + color + " played " + message);
+            handler.sendToClient(gameController.getBoardAscii());
+        } else if(result == MoveResult.OCCUPIED) {
+            handler.sendToClient("INVALID: cell occupied");
+        } else if(result == MoveResult.SUICIDE) {
+            handler.sendToClient("INVALID: suicide move");
+        } else if(result == MoveResult.GAMEOVER) {
+            handler.sendToClient("GAME OVER");
         }
 
     }
@@ -58,15 +58,5 @@ public class NetworkGameBridge {
             return null;
         }
         return new Point(x, y);
-    }
-
-    public boolean processMove(int x, int y, PlayerColor color) {
-        return gameController.processMoveFromNetwork(x, y, color);
-    }
-    public String displayBoard(){
-        return gameController.getBoardAscii();
-    }
-    public PlayerInterface getCurrentPlayer(){
-        return gameController.getCurrentPlayer();
     }
 }

@@ -1,56 +1,40 @@
 package org.example;
 
 public class NewGameController  {
-    private Board board;
-    private PlayerInterface black;
-    private PlayerInterface white;
-    private PlayerInterface currentPlayer;
+    private final Board board;
+    private Stone currentPlayer = Stone.BLACK;
+    private int passCounter = 0;
 
-    public NewGameController(Board board, PlayerInterface black, PlayerInterface white) {
+    public NewGameController(Board board) {
         this.board = board;
-        this.black = black;
-        this.white = white;
-        this.currentPlayer = black; //zaczyna czarny
     }
 
     public Board getBoard() {
         return board;
     }
 
-    public PlayerInterface getCurrentPlayer() {
+    public Stone getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public void switchTurn() {
-        if (currentPlayer == black){
-            currentPlayer = white;
+    public MoveResult playMove(Move move) {
+        MoveResult result = board.placeStone(new Point(move.getX(), move.getY()), move.getColor());
+        if(result == MoveResult.OK) {
+            passCounter = 0;
+            currentPlayer = currentPlayer.opposite();
         }
-        else {
-            currentPlayer = black;
-        }
+        return result;
     }
-
-    public boolean placeMove(Move move){
-        return board.placeStone(move);
-    }
-
-    public boolean isMovePossible(Move move) {
-        return board.isOnBoard(move.getX(), move.getY()) &&
-               board.isEmpty(move.getX(), move.getY());
-    }
-
-    public boolean processMoveFromNetwork(int x, int y, PlayerColor color){
-        Move move = new Move(x, y, color);
-        if (isMovePossible(move)){
-            placeMove(move);
-            switchTurn();
-            return true;
-        }
-        return false;
+    
+    public MoveResult pass() {
+        passCounter++;
+        if(passCounter >= 2) return MoveResult.GAMEOVER;
+        currentPlayer = currentPlayer.opposite();
+        return MoveResult.PASS;
     }
 
     public String getBoardAscii() {
-        return board.toAscii(); // to widziałam że masz, to przepisałam
+        return board.toAscii();
     }
 
 }
