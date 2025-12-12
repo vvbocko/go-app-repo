@@ -23,7 +23,6 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("DEBUG 1: run() start");
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);

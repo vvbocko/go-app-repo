@@ -34,7 +34,7 @@ public class GameClient {
     }
 
     public void receiveMessage(String message) {
-        System.out.println("Server: " + message);
+        System.out.println(message);
     }
 
     public void close() {
