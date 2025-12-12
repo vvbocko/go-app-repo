@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>4</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>292</x>
+      <y>332</y>
+      <w>100</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;abstract&gt;&gt; Board
+--
+- size: int
+--
++ Board(size: int)
++ isEmpty(x: int, y: int) : boolean
++ isOnBoard(x: int, y: int) : boolean
++ getStone(x: int, y: int) : PlayerColor
++ placeStone(move: Move) : boolean 
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>140</x>
+      <y>432</y>
+      <w>84</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>Board19X19
+--
+--
++ Board19x19()
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>152</x>
+      <y>472</y>
+      <w>84</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>Board13x13
+--
+--
++ Board13x13()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>200</x>
+      <y>512</y>
+      <w>84</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>Board9x9
+--
+--
++ Board9x9()
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>512</x>
+      <y>356</y>
+      <w>108</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>Move
+--
+- x: int
+- y: int
+- color: PlayerColor
+--
++ Move(x: int, y: int, color: PlayerColor) 
++ getX() : int
++ getY() : int
++ getColor() : PlayerColor
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>556</x>
+      <y>452</y>
+      <w>84</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>Player
+--
+- color: PlayerColor
+--
++ Player(color: PlayerColor)
++ getColor() : PlayerColor
++ getMove() : Move
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>624</x>
+      <y>540</y>
+      <w>64</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt; PlayerColor
+--
+BLACK
+WHITE
+EMPTY
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>148</x>
+      <y>360</y>
+      <w>116</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>BoardBuilder
+--
+- size: int
+--
++ setSize(size : int) : BoardBuilderInterface
++ build() : Board
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>876</x>
+      <y>348</y>
+      <w>96</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>GameServer
+--
+- serverSocket: ServerSocket
+- clients: List&lt;ClientHandler&gt;
+- gameController: GameController
+--
++ start() : void
++ stop() : void
++ acceptClients() : void
++ startGame() : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>692</x>
+      <y>280</y>
+      <w>124</w>
+      <h>68</h>
+    </coordinates>
+    <panel_attributes>GameClient
+--
+- socket: Socket
+- input: ObjectInputStream
+- output: ObjectOutputStream
+- player: PlayerInterface
+- ui: UserInterface
+--
++ sendMove(move: Move) : void
++ receiceMove() : Move
++ connectToServer(host: String, port: int) : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>836</x>
+      <y>244</y>
+      <w>96</w>
+      <h>68</h>
+    </coordinates>
+    <panel_attributes>ClientHandler
+--
+- socket: Socket
+- input: ObjectInputStream
+- output: ObjectOutputStream
+- color: PlayerColor
+- gameController: GameController
+--
++ run() : void
++ sendMove(move: Move) : void
++ receiveMove(): Move
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>272</x>
+      <y>264</y>
+      <w>124</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>ConsoleUserInterface
+--
+--
++ getMove(player: PlayerInterface) : Move
++ displayBoard(board: Board) : void
++ displayMessage(message: String) : void
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>8</x>
+      <y>376</y>
+      <w>116</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt; BoardBuilderInterface
+--
+--
++ setSize(size: int) BoardBuilderInterface
++ build(): Board
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>500</x>
+      <y>540</y>
+      <w>80</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt; PlayerInterface
+--
+--
++ getColor() : PlayerColor
++ getMove: Move
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>308</x>
+      <y>528</y>
+      <w>116</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt; GameControllerInterface
+--
+--
++ getBoard() : Board
++ getCurrentPlayer() : PlayerInterface
++ isMovePossible(move: Move) : boolean
++ switchTurn() : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>324</x>
+      <y>420</y>
+      <w>156</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>GameController
+--
+- board: Board
+- player1: PlayerInterface
+- player2: PlayerInterface
+- currentPlayer: PlayerInterface
+--
++ GameController(board: Board, player1: PlayerInterface, 
+   player2: PlayerInterface)
++ getBoard(): Board
++ getCurrentPlayer() : PlayerInterface
++ isMovePossible(move: Move) : boolean
++ switchTurn(): void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>724</x>
+      <y>380</y>
+      <w>120</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>ClientListener
+--
+- client: GameClient
+--
++ run()
++ handleMove(move: Move) : void
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>464</x>
+      <y>272</y>
+      <w>120</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt; UserInterface
+--
+--
++ getMove(player: PlayerInterface) : Move
++ displayBoard(board: Board) : void
++ displayMessage(message: String) : void
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>540</x>
+      <y>496</y>
+      <w>40</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>80.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>392</x>
+      <y>268</y>
+      <w>80</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;180.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>516</x>
+      <y>304</y>
+      <w>24</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;40.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>388</x>
+      <y>304</y>
+      <w>84</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>190.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>220</x>
+      <y>384</y>
+      <w>80</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>180.0;10.0;10.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>260</x>
+      <y>348</y>
+      <w>40</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>80.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>120</x>
+      <y>388</y>
+      <w>36</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>70.0;10.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>232</x>
+      <y>384</y>
+      <w>80</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>180.0;10.0;10.0;240.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>244</x>
+      <y>384</y>
+      <w>80</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>180.0;10.0;10.0;320.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>540</x>
+      <y>416</y>
+      <w>40</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;80.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>616</x>
+      <y>496</y>
+      <w>44</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>90.0;110.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>416</x>
+      <y>304</y>
+      <w>80</w>
+      <h>124</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>180.0;10.0;10.0;290.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>360</x>
+      <y>496</y>
+      <w>48</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>100.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>908</x>
+      <y>308</y>
+      <w>40</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;80.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>732</x>
+      <y>344</y>
+      <w>16</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;20.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>584</x>
+      <y>132</y>
+      <w>132</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>NetworkGameBridge
+--
+- gameController: GameController
+--
++ NetworkGameBridge(controller GameController)
++ processMove(move: Move) : boolean
++ getBoard() : Board
++ getCurrentPlayer() : PlayerInterface
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>712</x>
+      <y>140</y>
+      <w>132</w>
+      <h>148</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;310.0;350.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>712</x>
+      <y>164</y>
+      <w>32</w>
+      <h>124</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;60.0;290.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>528</x>
+      <y>148</y>
+      <w>64</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>140.0;10.0;10.0;310.0</additional_attributes>
+  </element>
+</diagram>
