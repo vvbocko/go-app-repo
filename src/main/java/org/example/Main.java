@@ -11,11 +11,23 @@ public class Main {
 
         while(true) {
             System.out.println("Tura gracza: " + gameController.getCurrentPlayer());
-            System.out.print("Podaj pole (wzor: A1): ");
+            System.out.print("Podaj pole (wzor: A1) lub PASS: ");
 
             String input = scanner.nextLine().trim();
-            Point p = parsePoint(input, board.getSize());
 
+            if(input.equalsIgnoreCase("PASS")) {
+                MoveResult result = gameController.pass();
+                if(result == MoveResult.GAMEOVER) {
+                    System.out.println("Koniec gry: obaj gracze spasowali.");
+                    System.out.println(gameController.getBoardAscii());
+                    break;
+                }
+                System.out.println("Gracz :" + gameController.getCurrentPlayer().opposite() + " spasował.");
+                System.out.println(gameController.getBoardAscii());
+                continue;
+            }
+
+            Point p = parsePoint(input, board.getSize());
             if (p == null) {
                 continue;
             }
