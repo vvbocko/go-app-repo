@@ -126,6 +126,15 @@ public class Board {
             removeGroup(enemiesToKill);
         }
 
+        List<Point> myGroup = getGroup(point); //do sprawdzenia czy kamien nie wejdzie w "martwe pole"
+        int myBreaths = countBreaths(myGroup);
+
+        if (myBreaths == 0 && enemyGroupToKill.isEmpty()) // ruch na martwe pole jest okej jeżeli przy tym zabijamy kamienie przeciwnika
+        {
+            grid[point.x()][point.y()] = Stone.NONE;
+            return MoveResult.SUICIDE;
+        }
+
         return MoveResult.OK;
     }
 
