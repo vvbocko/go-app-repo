@@ -1,5 +1,10 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 public class Board {
     private final Stone[][] grid;
     private final int size;
@@ -21,6 +26,63 @@ public class Board {
 
     public boolean isEmpty(Point point) {
         return grid[point.x()][point.y()] == Stone.NONE;
+    }
+
+    private List<Point> getNeighbours(Point point) {
+        List<Point> neighbourList = new ArrayList<>();
+
+        int x = point.x();
+        int y = point.y();
+
+        if (x > 0) {
+            neighbourList.add(new Point(x-1, y));
+        }
+        if (x < size-1) {
+            neighbourList.add(new Point(x+1, y));
+        }
+        if (y > 0) {
+            neighbourList.add(new Point(x, y-1));
+        }
+        if (y < size-1) {
+            neighbourList.add(new Point(x, y+1));
+        }
+        return neighbourList;
+    }
+
+    private List<Point> getGroup(Point startPoint) {
+        // znajdź start point odpowiedniego koloru i od niego przeszukaj getNeighbours()
+        // następnie zapisz points do listy checkedList, i points do listy toBeCheckedList
+        List<Point> group = new ArrayList<>();
+
+        Stone color = grid[startPoint.x()][startPoint.y()];
+        if (color == Stone.NONE){
+            return group;
+        }
+
+        boolean[][] visited = new boolean[size][size];
+        Queue<Point> toBeVisited = new LinkedList<>();
+        toBeVisited.add(startPoint);
+
+        while(!toBeVisited.isEmpty()) {
+            Point point = toBeVisited.poll(); //poll() - pobiera i usuwa element z kolejki
+
+            if (visited[point.x()][point.y()]) { // zabezpieczenie bo ten sam punkt mógł zostać dodany z kilku sąsiadów
+                continue;
+            }
+            visited[point.x()][point.y()] = true; // zaznaczamy jako odwiedzone i dodajemy do grupy
+            group.add(point);
+
+            for (Point n : getNeighbours(point)) {  //spośrod sąsiadów punktu
+                if (visited[n.x()][n.y()]) {
+                    continue;
+                }
+                if (grid[n.x()][n.y()] == color) { //sprawdzamy czy ma ten sam kolor co startPoint
+                    toBeVisited.add(n);
+                }
+            }
+
+        }
+        return group;
     }
 
     public MoveResult placeStone(Point point, Stone stone) {
