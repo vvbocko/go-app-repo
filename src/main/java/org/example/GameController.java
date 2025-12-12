@@ -18,7 +18,7 @@ public class GameController {
         if(result == MoveResult.OK) {
             currentPlayer = currentPlayer.opposite();
         }
-        return result; // zamiast board.placeStone(point, currentPlayer); bo wczesniej typ byl void zamiast MoveResult
+        return result;
 
     }
 
@@ -26,7 +26,3 @@ public class GameController {
         return board.toAscii();
     }
 }
-// Dodać:
-// - sprawdzenie czy pole wolne - ZROBIONE
-// - liczenie oddechów
-// - usuwanie zbitych kamieni

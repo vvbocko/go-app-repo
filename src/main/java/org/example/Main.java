@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        Board board = new Board(19);
+        Board board = new Board(9);
         GameController gameController = new GameController(board);
 
         while(true) {
@@ -25,6 +25,11 @@ public class Main {
             if(result == MoveResult.OCCUPIED)
             {
                 System.out.println("Error: wybrane pole jest zajęte");
+                continue;
+            }
+            if(result == MoveResult.SUICIDE)
+            {
+                System.out.println("Error: na wybranym polu nie masz oddechów.");
                 continue;
             }
 

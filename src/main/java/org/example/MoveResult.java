@@ -1,5 +1,5 @@
 package org.example;
 
 public enum MoveResult {
-    OK, OCCUPIED
+    OK, OCCUPIED, SUICIDE
 }
