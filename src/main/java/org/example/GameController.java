@@ -4,9 +4,11 @@ public class GameController  {
     private final Board board;
     private Stone currentPlayer = Stone.BLACK;
     private int passCounter = 0;
+    private Rules rules;
 
-    public GameController(Board board) {
+    public GameController(Board board, Rules rules) {
         this.board = board;
+        this.rules = rules;
     }
 
     public Board getBoard() {
@@ -18,7 +20,7 @@ public class GameController  {
     }
 
     public MoveResult playMove(Move move) {
-        MoveResult result = board.placeStone(new Point(move.getX(), move.getY()), move.getColor());
+        MoveResult result = rules.play(board, move);
         if(result == MoveResult.OK) {
             passCounter = 0;
             currentPlayer = currentPlayer.opposite();

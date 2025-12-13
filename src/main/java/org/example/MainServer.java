@@ -8,7 +8,8 @@ public class MainServer {
         int port = 123;
         Scanner scanner = new Scanner(System.in);
         Board board = new Board(9);
-        GameController gameController = new GameController(board);
+        Rules rules = new GameRules();
+        GameController gameController = new GameController(board, rules);
         NetworkGameBridge bridge = new NetworkGameBridge(gameController);
         GameServer server = new GameServer(port, bridge);
 

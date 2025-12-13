@@ -1,11 +1,7 @@
 package org.example;
 
-import org.example.network.ClientHandler;
-import org.example.network.GameSession;
-
 public class NetworkGameBridge {
     private GameController gameController;
-    private GameSession session;
 
     public NetworkGameBridge(GameController gameController){
         this.gameController = gameController;
@@ -15,11 +11,6 @@ public class NetworkGameBridge {
         return gameController;
     }
 
-    public void handleClientInput(ClientHandler handler, String message) {
-        if (session != null){
-            session.handleMove(handler, message);
-        }
-    }
     public static Point parsePoint(String input, int size) {
         if (input == null || input.isBlank()) {
             System.out.println("Error: wpisz współrzędne (np. A1)");
@@ -44,7 +35,4 @@ public class NetworkGameBridge {
         return new Point(x, y);
     }
 
-    public void setSession(GameSession session) {
-        this.session = session;
-    }
 }

@@ -37,28 +37,24 @@ public class GameServer {
                 }
                 System.out.println("New client connected");
 
-
-                ClientHandler handler = new ClientHandler(playerSocket, bridge);
+                Stone color;
                 if (clients.isEmpty()) {
-                    handler.stoneColor = Stone.BLACK;
+                    color = Stone.BLACK;
                 } else {
-                    handler.stoneColor = Stone.WHITE;
+                    color = Stone.WHITE;
                 }
-                
-
+                ClientHandler handler = new ClientHandler(playerSocket, color);
                 clients.add(handler);
-                new Thread(handler).start();
 
-                if (clients.size() == 1) {
-                    //handler.sendToClient("Waiting for second player...");
-                }
+                new Thread(handler).start();
 
                 if (clients.size() == 2) {
                     ClientHandler black = clients.get(0);
                     ClientHandler white = clients.get(1);
 
-                    GameSession session = new GameSession(black, white, bridge.getGameController());
-                    bridge.setSession(session);
+                    GameSession session = new GameSession(black, white, bridge);
+                    black.setSession(session);
+                    white.setSession(session);
                 }
             }
 

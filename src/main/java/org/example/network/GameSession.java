@@ -1,19 +1,19 @@
 package org.example.network;
-import java.io.*;
-import java.util.*;
-import org.example.*;
+import org.example.MoveResult;
+import org.example.NetworkGameBridge;
+import org.example.Point;
 public class GameSession {
     private ClientHandler black;
     private ClientHandler white;
     private ClientHandler currentPlayer;
-    private GameController gameController;
+    private NetworkGameBridge bridge;
 
     
 
-    public GameSession(ClientHandler black, ClientHandler white, GameController gameController){
+    public GameSession(ClientHandler black, ClientHandler white, NetworkGameBridge bridge){
         this.black = black;
         this.white = white;
-        this.gameController = gameController;
+        this.bridge = bridge;
         this.currentPlayer = black;
 
         startGame();
@@ -28,18 +28,18 @@ public class GameSession {
         white.sendToClient("Waiting for BLACK's move...'");
     }
     public synchronized void handleMove(ClientHandler client, String move){
-        Point p = NetworkGameBridge.parsePoint(move, gameController.getBoard().getSize());
+        Point p = NetworkGameBridge.parsePoint(move, bridge.getGameController().getBoard().getSize());
 
         if (p == null) {
             client.sendToClient("INVALID: wrong format (try A1)");
             return;
         }
-        if (client.stoneColor != gameController.getCurrentPlayer()) {
+        if (client.stoneColor != bridge.getGameController().getCurrentPlayer()) {
             client.sendToClient("Wait for your turn.");
             return;
         }
 
-        MoveResult result = gameController.tryMove(p);
+        MoveResult result = bridge.getGameController().tryMove(p);
 
         switch (result) {
             case OK:
@@ -66,7 +66,7 @@ public class GameSession {
     }
 
     private void displayBoard() {
-        String boardAscii = gameController.getBoardAscii();
+        String boardAscii = bridge.getGameController().getBoardAscii();
         sendToBothClients(boardAscii);
     }
 
