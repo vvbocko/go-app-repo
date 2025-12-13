@@ -8,8 +8,6 @@ public class GameSession {
     private ClientHandler currentPlayer;
     private NetworkGameBridge bridge;
 
-    
-
     public GameSession(ClientHandler black, ClientHandler white, NetworkGameBridge bridge){
         this.black = black;
         this.white = white;
@@ -81,5 +79,4 @@ public class GameSession {
             black.sendToClient("Your turn.");
         }
     }
-
 }

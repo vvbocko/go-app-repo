@@ -26,22 +26,16 @@ public class ClientHandler implements Runnable {
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
-
-            // Informacja o kolorze
             sendToClient("You are playing as: " + stoneColor);
-
-            // Jeśli sesja jeszcze nie istnieje, poczekaj
             if (session == null) {
                 sendToClient("Waiting for second player to join...");
-                // czekamy na sesję, zanim klient zacznie wysyłać ruchy
+
                 synchronized (this) {
                     while (session == null) {
                         wait();
                     }
                 }
             }
-
-            // Sesja już istnieje, gra się zaczyna
             String message;
             while ((message = in.readLine()) != null) {
                 session.handleMove(this, message);
@@ -54,7 +48,7 @@ public class ClientHandler implements Runnable {
 
     public synchronized void setSession(GameSession session) {
         this.session = session;
-        notify(); // obudzi wątek, który czekał na sesję
+        notify(); 
     }
 
     public void sendToClient(String message) {

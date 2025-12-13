@@ -57,7 +57,6 @@ public class GameServer {
                     white.setSession(session);
                 }
             }
-
         } catch (IOException e) {
             System.out.println("Server error: " + e.getMessage());
         }
