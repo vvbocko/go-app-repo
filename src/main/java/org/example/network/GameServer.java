@@ -54,11 +54,11 @@ public class GameServer {
                 }
 
                 if (clients.size() == 2) {
-                    clients.get(0).sendToClient("Second player joined. Game starts!");
-                    clients.get(1).sendToClient("Game starts!");
+                    ClientHandler black = clients.get(0);
+                    ClientHandler white = clients.get(1);
 
-                    clients.get(0).sendToClient(bridge.getGameController().getBoardAscii());
-                    clients.get(1).sendToClient(bridge.getGameController().getBoardAscii());
+                    GameSession session = new GameSession(black, white, bridge.getGameController());
+                    bridge.setSession(session);
                 }
             }
 

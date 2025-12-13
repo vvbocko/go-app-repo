@@ -27,7 +27,6 @@ public class ClientHandler implements Runnable {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
-            sendToClient("CONNECTED");
             sendToClient("You are playing as: " + stoneColor);
 
             if (stoneColor == Stone.BLACK) {

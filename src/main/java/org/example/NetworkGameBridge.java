@@ -1,9 +1,11 @@
 package org.example;
 
 import org.example.network.ClientHandler;
+import org.example.network.GameSession;
 
 public class NetworkGameBridge {
     private GameController gameController;
+    private GameSession session;
 
     public NetworkGameBridge(GameController gameController){
         this.gameController = gameController;
@@ -14,29 +16,11 @@ public class NetworkGameBridge {
     }
 
     public void handleClientInput(ClientHandler handler, String message) {
-        Point p = parsePoint(message, gameController.getBoard().getSize());
-
-        if (p == null) {
-            handler.sendToClient("INVALID: wrong format (try A1)");
-            return;
+        if (session != null){
+            session.handleMove(handler, message);
         }
-        Stone color = handler.stoneColor;
-        Move move = new Move(p.x(), p.y(), color);
-
-        MoveResult result = gameController.playMove(move);
-        if(result == MoveResult.OK) {
-            handler.sendToClient("OK: " + color + " played " + message);
-            handler.sendToClient(gameController.getBoardAscii());
-        } else if(result == MoveResult.OCCUPIED) {
-            handler.sendToClient("INVALID: cell occupied");
-        } else if(result == MoveResult.SUICIDE) {
-            handler.sendToClient("INVALID: suicide move");
-        } else if(result == MoveResult.GAMEOVER) {
-            handler.sendToClient("GAME OVER");
-        }
-
     }
-    private static Point parsePoint(String input, int size) {
+    public static Point parsePoint(String input, int size) {
         if (input == null || input.isBlank()) {
             System.out.println("Error: wpisz współrzędne (np. A1)");
             return null;
@@ -45,7 +29,7 @@ public class NetworkGameBridge {
         input = input.toUpperCase();
 
         if (!input.matches("^[A-Z]\\d+$")) {
-            System.out.println("Erorr: zły format (poprawny to np. A1)");
+            System.out.println("Error: zły format (poprawny to np. A1)");
             return null;
         }
 
@@ -58,5 +42,9 @@ public class NetworkGameBridge {
             return null;
         }
         return new Point(x, y);
+    }
+
+    public void setSession(GameSession session) {
+        this.session = session;
     }
 }

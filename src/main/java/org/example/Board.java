@@ -158,8 +158,8 @@ public class Board {
             for (int x = 0; x < size; x++) {
                 Stone color = grid[x][y];
                 String symbol =
-                        color == Stone.BLACK ? "●" :
-                        color == Stone.WHITE ? "◯" : "+";
+                        color == Stone.BLACK ? "B" :
+                        color == Stone.WHITE ? "W" : "+";
 
                 stringBuilder.append(String.format("%-3s", symbol));
             }

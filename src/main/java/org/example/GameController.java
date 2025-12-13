@@ -37,4 +37,9 @@ public class GameController  {
         return board.toAscii();
     }
 
+    public MoveResult tryMove(Point p){
+        Move move = new Move(p.x(), p.y(), currentPlayer);
+        return playMove(move);
+    }
+
 }
