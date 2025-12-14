@@ -18,8 +18,7 @@ public class GameSession {
     }
 
     private void startGame(){
-        black.sendToClient("Game starts!");
-        white.sendToClient("Game starts!");
+        sendToBothClients("Game starts!");
         displayBoard();
 
         black.sendToClient("Your turn.");
