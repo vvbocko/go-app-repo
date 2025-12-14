@@ -43,5 +43,4 @@ public class GameController  {
         Move move = new Move(p.x(), p.y(), currentPlayer);
         return playMove(move);
     }
-
 }

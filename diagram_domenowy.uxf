@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>12</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>576</x>
+      <y>84</y>
+      <w>336</w>
+      <h>300</h>
+    </coordinates>
+    <panel_attributes>Board
+--
+- grid: Stone[][]
+- size: int
+--
++ Board(size: int)
+- initialiseBoard() : void
++ isEmpty(point: Point) : boolean
+- getNeighbours(point: Point) : List&lt;Point&gt;
+- getGroup(startPoint: Point) : List&lt;Point&gt;
+- countBreaths(group: List&lt;Point&gt;) : int
+- removeGroup(group: List&lt;Point&gt;) : void
++ placeStone(point: Point, stone Stone) :
+    MoveResult
++ toAscii() : String
++ getSize() : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>204</x>
+      <y>204</y>
+      <w>336</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>Move
+--
+- x: int
+- y: int
+- color: Stone
+--
++ Move(x: int, y: int, color: Stone) 
++ getX() : int
++ getY() : int
++ getColor() : Stone</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>456</x>
+      <y>528</y>
+      <w>228</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;record&gt;&gt; Point
+--
++ x: int
++ y: int
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>756</x>
+      <y>528</y>
+      <w>228</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt; MoveResult
+--
+OK 
+OCCUPIED 
+SUICIDE
+PASS 
+GAMEOVER
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>168</x>
+      <y>528</y>
+      <w>228</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt; Stone
+--
+BLACK
+WHITE 
+NONE
+--
++ opposite() : Stone</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>552</x>
+      <y>372</y>
+      <w>108</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+</panel_attributes>
+    <additional_attributes>10.0;130.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>300</x>
+      <y>372</y>
+      <w>312</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+</panel_attributes>
+    <additional_attributes>10.0;130.0;240.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>216</x>
+      <y>372</y>
+      <w>144</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>100.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>396</x>
+      <y>372</y>
+      <w>132</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;90.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>660</x>
+      <y>372</y>
+      <w>156</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+</panel_attributes>
+    <additional_attributes>110.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
