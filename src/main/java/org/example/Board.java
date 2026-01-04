@@ -172,4 +172,8 @@ public class Board {
     public int getSize() {
         return size;
     }
+
+    public Stone getStone(Point p) {
+        return grid[p.x()][p.y()];
+    }
 }
