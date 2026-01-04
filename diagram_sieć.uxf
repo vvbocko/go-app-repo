@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>568</x>
+      <y>152</y>
+      <w>272</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>GameSession
+--
+- black: ClientHandler
+- white: ClientHandler
+- currentPlayer: ClientHandler
+- bridge: NetworkGameBridge
+--
++ GameSession(black: ClientHandler, white: 
+     ClientHandler, bridge: NetworkGameBridge)
+- startGame() : void
++ handleMove(client: ClientHandler, 
+     move: String) : void
+- sendToBothClients(message: String) : void
+- displayBoard() : void
+- switchTurn() : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>808</x>
+      <y>456</y>
+      <w>272</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>ClientHandler
+--
+- socket: Socket
+- int: BufferedReader
+- out: PrintWriter
+- session: GameSession
+- stoneColor: Stone
+--
++ ClientHandler(socket: Socket, stoneColor: Stone)
++ run() : void
++ sendToClient(message: String) : void
++ setSession(session: GameSession) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>424</x>
+      <y>456</y>
+      <w>200</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>GameServer
+--
+- port: int
+- bridge: NetworkGameBridge
+- clients: List&lt;ClientHandler&gt;
+--
++ GameServer(port: int, 
+    bridge: NetworkGameBridge)
++ start() : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>80</x>
+      <y>160</y>
+      <w>224</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>ClientListener
+--
+- in: BufferedReader
+- client: GameClient
+--
++ ClientListener(in: BufferedReader, 
+     client: GameClient)
++ run() : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>80</x>
+      <y>440</y>
+      <w>232</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>GameClient
+--
+- socket: Socket
+- out: PrintWriter
+- in: BufferedReader
+--
++ connect(ip: String, port: int) : void
++ sendMessage(message: String) : void
++ receiveMessage(message: String) : void
++ close() : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>616</x>
+      <y>520</y>
+      <w>208</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+
+
+0 .. 2</panel_attributes>
+    <additional_attributes>10.0;20.0;240.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>328</y>
+      <w>88</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>632</x>
+      <y>72</y>
+      <w>136</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>
+NetworkGameBridge</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>688</x>
+      <y>112</y>
+      <w>24</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>792</x>
+      <y>328</y>
+      <w>96</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>   1 .. 2</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>232</x>
+      <y>256</y>
+      <w>24</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>136</x>
+      <y>256</y>
+      <w>24</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;230.0</additional_attributes>
+  </element>
+</diagram>

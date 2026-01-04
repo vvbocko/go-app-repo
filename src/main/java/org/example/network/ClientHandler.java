@@ -36,9 +36,9 @@ public class ClientHandler implements Runnable {
                     }
                 }
             }
-            String message;
-            while ((message = in.readLine()) != null) {
-                session.handleMove(this, message);
+            String move;
+            while ((move = in.readLine()) != null) {
+                session.handleMove(this, move);
             }
 
         } catch (IOException | InterruptedException e) {
