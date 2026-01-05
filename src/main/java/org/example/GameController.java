@@ -1,14 +1,29 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameController  {
     private final Board board;
+    private final Rules rules;
     private Stone currentPlayer = Stone.BLACK;
     private int passCounter = 0;
-    private Rules rules;
+
+    private final List<GameStateListener> listeners = new ArrayList<>();
 
     public GameController(Board board, Rules rules) {
         this.board = board;
         this.rules = rules;
+    }
+
+    public void addListener(GameStateListener l) {
+        listeners.add(l);
+    }
+
+    private void notifyListeners() {
+        for (GameStateListener l : listeners) {
+            l.onGameStateChanged();
+        }
     }
 
     public Board getBoard() {
@@ -24,14 +39,19 @@ public class GameController  {
         if(result == MoveResult.OK) {
             passCounter = 0;
             currentPlayer = currentPlayer.opposite();
+            notifyListeners();
         }
         return result;
     }
     
     public MoveResult pass() {
         passCounter++;
-        if(passCounter >= 2) return MoveResult.GAMEOVER;
+        if(passCounter >= 2) {
+            notifyListeners();
+            return MoveResult.GAMEOVER;
+        }
         currentPlayer = currentPlayer.opposite();
+        notifyListeners();
         return MoveResult.PASS;
     }
 

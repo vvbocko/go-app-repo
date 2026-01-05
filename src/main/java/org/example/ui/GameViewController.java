@@ -8,19 +8,16 @@ import org.example.*;
 public class GameViewController {
 
     private static final int BOARD_SIZE = 9;
-
-    private final Board board;
     private final GameController gameController;
-    private final BoardView boardView;
-
     private final BorderPane root;
 
     public GameViewController() {
-        board = new Board(BOARD_SIZE);
+        Board board = new Board(BOARD_SIZE);
         Rules rules = new GameRules();
         gameController = new GameController(board, rules);
 
-        boardView = new BoardView(board);
+        BoardView boardView = new BoardView(board);
+        gameController.addListener(boardView);
         boardView.setOnBoardClick(this::handleBoardClick);
 
         Button passButton = new Button("PASS");
@@ -35,10 +32,6 @@ public class GameViewController {
 
     private void handleBoardClick(Point point) {
         MoveResult result = gameController.tryMove(point);
-
-        if (result == MoveResult.OK) {
-            boardView.draw();
-        }
     }
 
     private void handlePass() {

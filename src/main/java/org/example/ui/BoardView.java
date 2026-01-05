@@ -4,12 +4,13 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import org.example.Board;
+import org.example.GameStateListener;
 import org.example.Point;
 import org.example.Stone;
 
 import java.util.function.Consumer;
 
-public class BoardView {
+public class BoardView implements GameStateListener {
 
     private static final int CANVAS_SIZE = 600;
 
@@ -18,6 +19,11 @@ public class BoardView {
     private final double cell;
 
     private Consumer<Point> clickHandler;
+
+    @Override
+    public void onGameStateChanged() {
+        draw();
+    }
 
     public BoardView(Board board) {
         this.board = board;
