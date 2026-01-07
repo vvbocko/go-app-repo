@@ -51,9 +51,10 @@ public class GameViewController {
 
     private void handleResult(MoveResult result) {
         switch (result) {
-            case OCCUPIED -> showMessage("Pole jest już zajete");
-            case SUICIDE -> showMessage("Ruch samobójczy");
-            case GAMEOVER -> showMessage("Koniec gry");
+            case OCCUPIED -> showMessage("INVALID: cell occupied");
+            case SUICIDE -> showMessage("INVALID: suicide move");
+            case KO -> showMessage("INVALID: Ko rule");
+            case GAMEOVER -> showMessage("GAME OVER");
             default -> {}
         }
     }

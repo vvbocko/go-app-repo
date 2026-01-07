@@ -46,6 +46,8 @@ public class GameController  {
     
     public MoveResult pass() {
         passCounter++;
+        board.clearKo();
+
         if(passCounter >= 2) {
             notifyListeners();
             return MoveResult.GAMEOVER;

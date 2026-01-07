@@ -10,6 +10,7 @@ import java.util.Set;
 public class Board {
     private final Stone[][] grid;
     private final int size;
+    private Stone[][] previousGrid;
 
     public Board(int size) {
         this.grid = new Stone[size][size];
@@ -110,6 +111,9 @@ public class Board {
         if(!isEmpty(point)) {
             return MoveResult.OCCUPIED;
         }
+
+        Stone[][] snapshotBeforeMove = copyGrid();
+
         grid[point.x()][point.y()] = stone;
         Stone enemyColor = stone.opposite();
 
@@ -140,8 +144,46 @@ public class Board {
             return MoveResult.SUICIDE;
         }
 
+        if (previousGrid != null && gridsEqual(grid, previousGrid)){
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
+                    grid[x][y] = snapshotBeforeMove[x][y];
+                }
+            }
+            return MoveResult.KO;
+        }
+        previousGrid = snapshotBeforeMove;
+
         return MoveResult.OK;
     }
+
+    private Stone[][] copyGrid() {
+        Stone[][] copy = new Stone[size][size];
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                copy[x][y] = grid[x][y];
+            }
+        }
+        return copy;
+    }
+
+    private boolean gridsEqual(Stone[][] a, Stone[][] b) {
+        if (a == null || b == null) return false;
+
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                if (a[x][y] != b[x][y]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void clearKo() {
+        previousGrid = null;
+    }
+
 
     public String toAscii() {
         StringBuilder stringBuilder = new StringBuilder();

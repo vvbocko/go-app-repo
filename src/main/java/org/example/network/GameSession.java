@@ -49,6 +49,9 @@ public class GameSession {
             case SUICIDE:
                 client.sendToClient("INVALID: suicide move");
                 break;
+            case KO:
+                client.sendToClient("INVALID: Ko rule");
+                break;
             case GAMEOVER:
                 sendToBothClients("GAME OVER");
                 break;
