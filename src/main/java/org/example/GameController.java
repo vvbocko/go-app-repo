@@ -8,6 +8,8 @@ public class GameController  {
     private final Rules rules;
     private Stone currentPlayer = Stone.BLACK;
     private int passCounter = 0;
+    private int blackCaptures = 0;
+    private int whiteCaptures = 0;
 
     private final List<GameStateListener> listeners = new ArrayList<>();
 
@@ -38,6 +40,17 @@ public class GameController  {
         MoveResult result = rules.play(board, move);
         if(result == MoveResult.OK) {
             passCounter = 0;
+
+            int captured = board.getLastCapturedCount();
+            if (captured > 0) {
+                if (currentPlayer == Stone.BLACK) {
+                    blackCaptures += captured;
+                }
+                else {
+                    whiteCaptures += captured;
+                }
+            }
+
             currentPlayer = currentPlayer.opposite();
             notifyListeners();
         }
@@ -59,6 +72,14 @@ public class GameController  {
 
     public String getBoardAscii() {
         return board.toAscii();
+    }
+
+    public int getBlackCaptures() {
+        return blackCaptures;
+    }
+
+    public int getWhiteCaptures() {
+        return whiteCaptures;
     }
 
     public MoveResult tryMove(Point p){

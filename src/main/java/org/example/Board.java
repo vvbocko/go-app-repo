@@ -12,6 +12,8 @@ public class Board {
     private final int size;
     private Stone[][] previousGrid;
 
+    private int lastCapturedCount = 0;
+
     public Board(int size) {
         this.grid = new Stone[size][size];
         this.size = size;
@@ -101,13 +103,16 @@ public class Board {
         return breaths.size();
     }
 
-    private void removeGroup(List<Point> group) {
+    private int removeGroup(List<Point> group) {
         for (Point points : group) {
             grid[points.x()][points.y()] = Stone.NONE;
         }
+        return group.size(); // bedzie zwracac liczbe jencow
     }
 
     public MoveResult placeStone(Point point, Stone stone) {
+        lastCapturedCount = 0;
+
         if(!isEmpty(point)) {
             return MoveResult.OCCUPIED;
         }
@@ -132,7 +137,7 @@ public class Board {
         }
 
         for (List<Point> enemiesToKill : enemyGroupToKill) {
-            removeGroup(enemiesToKill);
+            lastCapturedCount += removeGroup(enemiesToKill); // ile kamieni zostalo zbitych w konkretnym ruchu
         }
 
         List<Point> myGroup = getGroup(point); //do sprawdzenia czy kamien nie wejdzie w "martwe pole"
@@ -217,5 +222,9 @@ public class Board {
 
     public Stone getStone(Point p) {
         return grid[p.x()][p.y()];
+    }
+
+    public int getLastCapturedCount() {
+        return lastCapturedCount;
     }
 }
