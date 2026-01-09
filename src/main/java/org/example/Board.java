@@ -162,6 +162,83 @@ public class Board {
         return MoveResult.OK;
     }
 
+
+    private List<Point> getEmptyArea(Point startPoint) {
+        List<Point> area = new ArrayList<>();
+
+        if (grid[startPoint.x()][startPoint.y()] != Stone.NONE) {
+            return area;
+        }
+
+        boolean[][] visited = new boolean[size][size];
+        Queue<Point> queue = new LinkedList<>();
+        queue.add(startPoint);
+
+        while (!queue.isEmpty()) {
+            Point p = queue.poll();
+
+            if (visited[p.x()][p.y()]) continue;
+            visited[p.x()][p.y()] = true;
+            area.add(p);
+
+            for (Point n : getNeighbours(p)) {
+                if (!visited[n.x()][n.y()] &&
+                        grid[n.x()][n.y()] == Stone.NONE) {
+                    queue.add(n);
+                }
+            }
+        }
+        return area;
+    }
+
+    private Set<Stone> getBorderColors(List<Point> area) {
+        Set<Stone> colors = new HashSet<>();
+
+        for (Point p : area) {
+            for (Point n : getNeighbours(p)) {
+                Stone s = grid[n.x()][n.y()];
+                if (s != Stone.NONE) {
+                    colors.add(s);
+                }
+            }
+        }
+        return colors;
+    }
+
+    public TerritoryCount calculateTerritory() {
+        boolean[][] visited = new boolean[size][size];
+        int blackTerritory = 0;
+        int whiteTerritory = 0;
+
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Point p = new Point(x, y);
+
+                if (grid[x][y] == Stone.NONE && !visited[x][y]) {
+
+                    List<Point> area = getEmptyArea(p);
+
+                    for (Point ap : area) {
+                        visited[ap.x()][ap.y()] = true;
+                    }
+
+                    Set<Stone> borders = getBorderColors(area);
+
+                    if (borders.size() == 1) {
+                        Stone owner = borders.iterator().next();
+                        if (owner == Stone.BLACK) {
+                            blackTerritory += area.size();
+                        } else if (owner == Stone.WHITE) {
+                            whiteTerritory += area.size();
+                        }
+                    }
+                }
+            }
+        }
+        return new TerritoryCount(blackTerritory, whiteTerritory);
+    }
+
+
     private Stone[][] copyGrid() {
         Stone[][] copy = new Stone[size][size];
         for (int x = 0; x < size; x++) {
