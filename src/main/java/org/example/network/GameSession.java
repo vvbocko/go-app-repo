@@ -1,7 +1,6 @@
 package org.example.network;
-import org.example.MoveResult;
-import org.example.NetworkGameBridge;
-import org.example.Point;
+import org.example.*;
+
 public class GameSession {
     private ClientHandler black;
     private ClientHandler white;
@@ -53,7 +52,19 @@ public class GameSession {
                 client.sendToClient("INVALID: Ko rule");
                 break;
             case GAMEOVER:
+                ScoreCalculator calculator = new ScoreCalculator();
+                Score score = calculator.calculate(
+                        bridge.getGameController().getBoard(),
+                        bridge.getGameController()
+                );
+
                 sendToBothClients("GAME OVER");
+                sendToBothClients("Score:");
+                sendToBothClients("BLACK: " + score.black());
+                sendToBothClients("WHITE: " + score.white());
+
+                Stone winner = bridge.getGameController().getWinner(score);
+                sendToBothClients("Winner: " + winner);
                 break;
             default:
                 break;

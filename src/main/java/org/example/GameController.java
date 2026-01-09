@@ -82,6 +82,13 @@ public class GameController  {
         return whiteCaptures;
     }
 
+    public Stone getWinner(Score score) {
+        if (score.black() > score.white()) return Stone.BLACK;
+        if (score.white() > score.black()) return Stone.WHITE;
+        return Stone.NONE;
+    }
+
+
     public MoveResult tryMove(Point p){
         Move move = new Move(p.x(), p.y(), currentPlayer);
         return playMove(move);
