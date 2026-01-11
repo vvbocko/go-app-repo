@@ -1,14 +1,15 @@
 package org.example.ui;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import java.util.function.Consumer;
+
 import org.example.Board;
 import org.example.GameStateListener;
 import org.example.Point;
 import org.example.Stone;
 
-import java.util.function.Consumer;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class BoardView implements GameStateListener {
 

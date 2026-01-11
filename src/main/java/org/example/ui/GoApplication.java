@@ -1,5 +1,8 @@
 package org.example.ui;
 
+import org.example.network.GameClient;
+import org.example.network.NetworkGameAdapter;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -9,14 +12,22 @@ public class GoApplication extends Application {
 
     @Override
     public void start(Stage stage) {
-        GameViewController controller = new GameViewController();
+        GameClient client = new GameClient();
+        client.connect("localhost", 123);
 
-        BorderPane root = controller.getRoot();
+        GameViewController gui = new GameViewController();
+        NetworkGameAdapter adapter = new NetworkGameAdapter(client, gui);
+        gui.setAdapter(adapter);
+        //adapter.getBoard().addListener(adapter::onBoardChanged);
+
+        BorderPane root = gui.getRoot();
         Scene scene = new Scene(root, 650, 650);
 
         stage.setTitle("Go");
         stage.setScene(scene);
         stage.show();
+
+        client.startListening();
     }
 
     public static void main(String[] args) {

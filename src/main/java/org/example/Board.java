@@ -162,6 +162,10 @@ public class Board {
         return MoveResult.OK;
     }
 
+    public void setStone(Point p, Stone stone){
+        grid[p.x()][p.y()] = stone;
+    }
+
 
     private List<Point> getEmptyArea(Point startPoint) {
         List<Point> area = new ArrayList<>();

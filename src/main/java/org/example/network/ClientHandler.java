@@ -10,11 +10,11 @@ import org.example.Stone;
 
 public class ClientHandler implements Runnable {
 
-    private Socket socket;
+    private final Socket socket;
     private BufferedReader in;
     private PrintWriter out;
     private GameSession session;
-    public Stone stoneColor;
+    public final Stone stoneColor;
 
     public ClientHandler(Socket socket, Stone stoneColor) {
         this.socket = socket;
@@ -26,16 +26,15 @@ public class ClientHandler implements Runnable {
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
-            sendToClient("You are playing as: " + stoneColor);
-            if (session == null) {
-                sendToClient("Waiting for second player to join...");
 
-                synchronized (this) {
-                    while (session == null) {
-                        wait();
-                    }
+            // Nie wysyłamy koloru od razu!
+            synchronized (this) {
+                while (session == null) {
+                    wait();
                 }
             }
+
+            // Po ustawieniu sesji wszystko wysyłane przez GameSession
             String move;
             while ((move = in.readLine()) != null) {
                 session.handleMove(this, move);
@@ -48,10 +47,12 @@ public class ClientHandler implements Runnable {
 
     public synchronized void setSession(GameSession session) {
         this.session = session;
-        notify(); 
+        notify(); // budzimy wątek run()
     }
 
     public void sendToClient(String message) {
-        out.println(message);
+        if (out != null) {
+            out.println(message);
+        }
     }
 }

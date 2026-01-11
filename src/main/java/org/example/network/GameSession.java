@@ -1,5 +1,10 @@
 package org.example.network;
-import org.example.*;
+import org.example.MoveResult;
+import org.example.NetworkGameBridge;
+import org.example.Point;
+import org.example.Score;
+import org.example.ScoreCalculator;
+import org.example.Stone;
 
 public class GameSession {
     private ClientHandler black;
@@ -17,41 +22,27 @@ public class GameSession {
     }
 
     private void startGame(){
+        black.sendToClient("You are playing as: BLACK");
+        white.sendToClient("You are playing as: WHITE");
+
         sendToBothClients("Game starts!");
         displayBoard();
 
         black.sendToClient("Your turn.");
-        white.sendToClient("Waiting for BLACK's move...'");
+        white.sendToClient("Waiting for BLACK to play...");
     }
-    public synchronized void handleMove(ClientHandler client, String move){
-        Point p = NetworkGameBridge.parsePoint(move, bridge.getGameController().getBoard().getSize());
-
-        if (p == null) {
-            client.sendToClient("INVALID: wrong format (try A1)");
-            return;
-        }
+    public synchronized void handleMove(ClientHandler client, String move) {
         if (client.stoneColor != bridge.getGameController().getCurrentPlayer()) {
             client.sendToClient("Wait for your turn.");
             return;
         }
 
-        MoveResult result = bridge.getGameController().tryMove(p);
+        if (move.equalsIgnoreCase("PASS")) {
+            MoveResult result = bridge.getGameController().pass();
 
-        switch (result) {
-            case OK:
+            if (result == MoveResult.GAMEOVER) {
                 displayBoard();
-                switchTurn();
-                break;
-            case OCCUPIED:
-                client.sendToClient("INVALID: cell occupied");
-                break;
-            case SUICIDE:
-                client.sendToClient("INVALID: suicide move");
-                break;
-            case KO:
-                client.sendToClient("INVALID: Ko rule");
-                break;
-            case GAMEOVER:
+
                 ScoreCalculator calculator = new ScoreCalculator();
                 Score score = calculator.calculate(
                         bridge.getGameController().getBoard(),
@@ -59,15 +50,38 @@ public class GameSession {
                 );
 
                 sendToBothClients("GAME OVER");
-                sendToBothClients("Score:");
                 sendToBothClients("BLACK: " + score.black());
                 sendToBothClients("WHITE: " + score.white());
 
                 Stone winner = bridge.getGameController().getWinner(score);
                 sendToBothClients("Winner: " + winner);
-                break;
-            default:
-                break;
+            } else {
+                displayBoard();
+                switchTurn();
+            }
+            return;
+        }
+        Point p = NetworkGameBridge.parsePoint(
+                move,
+                bridge.getGameController().getBoard().getSize()
+        );
+
+        if (p == null) {
+            client.sendToClient("INVALID: wrong format (try A1)");
+            return;
+        }
+
+        MoveResult result = bridge.getGameController().tryMove(p);
+
+        switch (result) {
+            case OK -> {
+                displayBoard();
+                switchTurn();
+            }
+            case OCCUPIED -> client.sendToClient("INVALID: cell occupied");
+            case SUICIDE -> client.sendToClient("INVALID: suicide move");
+            case KO -> client.sendToClient("INVALID: Ko rule");
+            default -> {}
         }
     }
 
@@ -78,7 +92,17 @@ public class GameSession {
 
     private void displayBoard() {
         String boardAscii = bridge.getGameController().getBoardAscii();
-        sendToBothClients(boardAscii);
+
+        black.sendToClient("BOARD_START");
+        white.sendToClient("BOARD_START");
+
+        for (String line : boardAscii.split("\n")) {
+            black.sendToClient(line);
+            white.sendToClient(line);
+        }
+
+        black.sendToClient("BOARD_END");
+        white.sendToClient("BOARD_END");
     }
 
     private void switchTurn() {

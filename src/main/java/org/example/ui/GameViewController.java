@@ -1,31 +1,29 @@
 package org.example.ui;
 
+import org.example.Board;
+import org.example.Point;
+import org.example.network.NetworkGameAdapter;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import org.example.*;
 
 public class GameViewController {
 
     private static final int BOARD_SIZE = 9;
-    private final GameController gameController;
+    private NetworkGameAdapter gameAdapter; 
     private final BorderPane root;
     private final Label statusLabel;
+    private final Board board;
+    private final BoardView boardView;
+    private boolean myTurn = false;
 
     public GameViewController() {
-        Board board = new Board(BOARD_SIZE);
-        Rules rules = new GameRules();
-        gameController = new GameController(board, rules);
-
-        BoardView boardView = new BoardView(board);
-        gameController.addListener(boardView);
-
-        statusLabel = new Label("Turn: " + gameController.getCurrentPlayer());
-        gameController.addListener(() ->
-                statusLabel.setText("Turn: " + gameController.getCurrentPlayer())
-        );
+        board = new Board(BOARD_SIZE);
+        boardView = new BoardView(board);
+        statusLabel = new Label("Waiting for opponent...");
 
         boardView.setOnBoardClick(this::handleBoardClick);
 
@@ -40,26 +38,14 @@ public class GameViewController {
     }
 
     private void handleBoardClick(Point point) {
-        MoveResult result = gameController.tryMove(point);
-        handleResult(result);
+        gameAdapter.playMove(point);
     }
 
     private void handlePass() {
-        MoveResult result = gameController.pass();
-        handleResult(result);
+        gameAdapter.pass();
     }
 
-    private void handleResult(MoveResult result) {
-        switch (result) {
-            case OCCUPIED -> showMessage("INVALID: cell occupied");
-            case SUICIDE -> showMessage("INVALID: suicide move");
-            case KO -> showMessage("INVALID: Ko rule");
-            case GAMEOVER -> showMessage("GAME OVER");
-            default -> {}
-        }
-    }
-
-    private void showMessage(String text) {
+    public void showMessage(String text) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(null);
         alert.setContentText(text);
@@ -68,5 +54,35 @@ public class GameViewController {
 
     public BorderPane getRoot() {
         return root;
+    }
+
+    public BoardView getBoardView() {
+        return boardView;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+    
+    public void setMyTurn(boolean value) {
+        myTurn = value;
+    }
+
+    public boolean isMyTurn() {
+        return myTurn;
+    }
+
+    public void refresh() {
+        boardView.draw();
+    }
+
+    public void setStatus(String text) {
+        statusLabel.setText(text);
+    }
+
+    public void setAdapter(NetworkGameAdapter gameAdapter) {
+        this.gameAdapter = gameAdapter;
+        setMyTurn(false);
+        statusLabel.setText("Waiting for server...");
     }
 }

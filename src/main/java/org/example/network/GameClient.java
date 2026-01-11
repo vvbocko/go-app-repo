@@ -12,6 +12,12 @@ public class GameClient {
     private PrintWriter out;
     private BufferedReader in;
 
+    private ServerMessageListener listener;
+
+    public void setServerMessageListener(ServerMessageListener listener) {
+        this.listener = listener;
+    }
+
     public void connect(String ip, int port) {
         try {
             socket = new Socket(ip, port);
@@ -21,11 +27,14 @@ public class GameClient {
 
             System.out.println("Connected to server.");
 
-            ClientListener listener = new ClientListener(in, this);
-            new Thread(listener).start();
-
         } catch (IOException e) {
             System.out.println("Connection error: " + e.getMessage());
+        }
+    }
+
+    private void handleMessageFromServer(String msg) {
+        if (listener != null) {
+            listener.onServerMessage(msg);
         }
     }
 
@@ -41,6 +50,23 @@ public class GameClient {
         try { 
             socket.close(); 
         } catch (Exception ignored) {}
+    }
+
+    private void listen() {
+        try {
+            String msg;
+            while ((msg = in.readLine()) != null) {
+                if (listener != null) {
+                    listener.onServerMessage(msg);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Server connection lost.");
+        }
+    }
+
+    public void startListening() {
+        new Thread(this::listen, "ServerListenerThread").start();
     }
 }
 
