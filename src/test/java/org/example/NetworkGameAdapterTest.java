@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import javafx.application.Platform;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public class NetworkGameAdapterTest {
     static class TestGameClient extends GameClient {
@@ -45,6 +47,12 @@ public class NetworkGameAdapterTest {
         public void showMessage(String msg) {
             status = msg;
         }
+
+        @Override
+        public void setCapturesDisplay(int blackCaptures, int whiteCaptures) { }
+
+        @Override
+        public void showGameOver(String blackScore, String whiteScore, String winner) { }
     }
 
     @BeforeAll
@@ -56,24 +64,44 @@ public class NetworkGameAdapterTest {
     }
 
     @Test
-    void testPlayerColor() {
+    void testPlayerColor() throws InterruptedException {
         TestGameClient client = new TestGameClient();
         TestGameViewController gui = new TestGameViewController();
 
         NetworkGameAdapter adapter = new NetworkGameAdapter(client, gui);
 
-        adapter.onServerMessage("You are playing as: BLACK");
+        CountDownLatch latch = new CountDownLatch(1);
+
+        Platform.runLater(() -> {
+            adapter.onServerMessage("You are playing as: BLACK");
+            latch.countDown();
+        });
+
+        assertTrue(latch.await(2, TimeUnit.SECONDS), "Timeout waiting for JavaFX thread");
+
+        //waitfor Platform.runLater in onServerMessage to finish
+        Thread.sleep(100);
+
         assertEquals(Stone.BLACK, adapter.getColor());
         assertEquals("You play as: BLACK", gui.status);
     }
 
     @Test
-    void testYourTurn() {
+    void testYourTurn() throws InterruptedException {
         TestGameClient client = new TestGameClient();
         TestGameViewController gui = new TestGameViewController();
         NetworkGameAdapter adapter = new NetworkGameAdapter(client, gui);
 
-        adapter.onServerMessage("Your turn.");
+        CountDownLatch latch = new CountDownLatch(1);
+
+        Platform.runLater(() -> {
+            adapter.onServerMessage("Your turn.");
+            latch.countDown();
+        });
+
+        assertTrue(latch.await(2, TimeUnit.SECONDS), "wait for JavaFX thread");
+        Thread.sleep(100);
+
         assertTrue(gui.myTurn);
     }
 }
