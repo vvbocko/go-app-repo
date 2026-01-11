@@ -32,10 +32,6 @@ public class GameSession {
     }
 
     public synchronized void handleMove(ClientHandler client, String move) {
-        if (client.stoneColor != bridge.getGameController().getCurrentPlayer()) {
-            client.sendToClient("Wait for your turn.");
-            return;
-        }
 
         if (move.equalsIgnoreCase("SURRENDER")) {
             bridge.getGameController().surrender();
@@ -72,6 +68,12 @@ public class GameSession {
             }
             return;
         }
+
+        if (client.stoneColor != bridge.getGameController().getCurrentPlayer()) {
+            client.sendToClient("Wait for your turn.");
+            return;
+        }
+        
         Point p = NetworkGameBridge.parsePoint(
                 move,
                 bridge.getGameController().getBoard().getSize()

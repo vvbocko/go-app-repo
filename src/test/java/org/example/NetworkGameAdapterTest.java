@@ -1,14 +1,7 @@
 package org.example;
 
 import org.example.network.GameClient;
-import org.example.network.NetworkGameAdapter;
 import org.example.ui.GameViewController;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
-import javafx.application.Platform;
 
 
 public class NetworkGameAdapterTest {
@@ -54,7 +47,7 @@ public class NetworkGameAdapterTest {
         } catch (IllegalStateException e) {
         }
     }
-
+ 
     @Test
     void testPlayerColor() {
         TestGameClient client = new TestGameClient();
@@ -65,7 +58,7 @@ public class NetworkGameAdapterTest {
         adapter.onServerMessage("You are playing as: BLACK");
         assertEquals(Stone.BLACK, adapter.getColor());
         assertEquals("You play as: BLACK", gui.status);
-    }
+    } 
 
     @Test
     void testYourTurn() {
@@ -75,5 +68,5 @@ public class NetworkGameAdapterTest {
 
         adapter.onServerMessage("Your turn.");
         assertTrue(gui.myTurn);
-    }
+    } 
 }

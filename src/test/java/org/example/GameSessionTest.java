@@ -71,14 +71,14 @@ public class GameSessionTest {
 
         boolean gameOverBlack = false;
         for (int i = 0; i < black.messages.size(); i++) {
-            if (black.messages.get(i).contains("GAME OVER")) {
+            if (black.messages.get(i).contains("GAME_OVER")) {
                 gameOverBlack = true;
             }
         }
 
         boolean gameOverWhite = false;
         for (int i = 0; i < white.messages.size(); i++) {
-            if (white.messages.get(i).contains("GAME OVER")) {
+            if (white.messages.get(i).contains("GAME_OVER")) {
                 gameOverWhite = true;
             }
         }
