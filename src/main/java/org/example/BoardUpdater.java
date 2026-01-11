@@ -9,6 +9,7 @@ public class BoardUpdater {
     }
 
     public void updateFromAscii(String ascii) {
+        if (ascii == null || ascii.isBlank()) return;
         String[] lines = ascii.split("\n");
 
         if (lines.length < board.getSize() + 1) {
@@ -23,6 +24,8 @@ public class BoardUpdater {
 
             String row = line.substring(3);
             String[] cells = row.trim().split("\\s+");
+
+            if (cells.length != board.getSize()) continue;
 
             for (int x = 0; x < board.getSize(); x++) {
                 Stone s = switch (cells[x]) {

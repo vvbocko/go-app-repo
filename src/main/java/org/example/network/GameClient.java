@@ -32,18 +32,8 @@ public class GameClient {
         }
     }
 
-    private void handleMessageFromServer(String msg) {
-        if (listener != null) {
-            listener.onServerMessage(msg);
-        }
-    }
-
     public void sendMessage(String message) {
         out.println(message);
-    }
-
-    public void receiveMessage(String message) {
-        System.out.println(message);
     }
 
     public void close() {

@@ -18,7 +18,6 @@ public class GoApplication extends Application {
         GameViewController gui = new GameViewController();
         NetworkGameAdapter adapter = new NetworkGameAdapter(client, gui);
         gui.setAdapter(adapter);
-        //adapter.getBoard().addListener(adapter::onBoardChanged);
 
         BorderPane root = gui.getRoot();
         Scene scene = new Scene(root, 650, 650);
