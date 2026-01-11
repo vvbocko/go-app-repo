@@ -26,47 +26,45 @@ public class NetworkGameAdapter implements GameAdapter, ServerMessageListener {
         client.setServerMessageListener(this);
     }
 
-@Override
-public void onServerMessage(String msg) {
-    javafx.application.Platform.runLater(() -> {
+    @Override
+    public void onServerMessage(String msg) {
+        javafx.application.Platform.runLater(() -> {
 
-        if (msg.equals("BOARD_START")) {
-            receivingBoard = true;
-            boardBuffer.setLength(0);
-            return;
-        }
+            if (msg.equals("BOARD_START")) {
+                receivingBoard = true;
+                boardBuffer.setLength(0);
+                return;
+            }
 
-        if (msg.equals("BOARD_END")) {
-            receivingBoard = false;
-            boardUpdater.updateFromAscii(boardBuffer.toString());
-            gui.refresh();
-            return;
-        }
+            if (msg.equals("BOARD_END")) {
+                receivingBoard = false;
+                boardUpdater.updateFromAscii(boardBuffer.toString());
+                gui.refresh();
+                return;
+            }
 
-        if (receivingBoard) {
-            boardBuffer.append(msg).append("\n");
-            return;
-        }
+            if (receivingBoard) {
+                boardBuffer.append(msg).append("\n");
+                return;
+            }
 
-        if (msg.startsWith("You are playing as:")) {
-            playerColor = msg.contains("BLACK") ? Stone.BLACK : Stone.WHITE;
-            gui.setStatus("You play as: " + playerColor);
-        }
-        else if (msg.startsWith("Your turn")) {
-            gui.setMyTurn(true);
-            gui.setStatus("Your turn");
-        }
-        else if (msg.startsWith("Waiting")) {
-            gui.setMyTurn(false);
-            gui.setStatus(msg);
-        }
-        else if (msg.startsWith("INVALID") || msg.startsWith("GAME OVER")) {
-            gui.showMessage(msg);
-        }
-    });
-}
-
-
+            if (msg.startsWith("You are playing as:")) {
+                playerColor = msg.contains("BLACK") ? Stone.BLACK : Stone.WHITE;
+                gui.setStatus("You play as: " + playerColor);
+            }
+            else if (msg.startsWith("Your turn")) {
+                gui.setMyTurn(true);
+                gui.setStatus("Your turn");
+            }
+            else if (msg.startsWith("Waiting")) {
+                gui.setMyTurn(false);
+                gui.setStatus(msg);
+            }
+            else if (msg.startsWith("INVALID") || msg.startsWith("GAME OVER")) {
+                gui.showMessage(msg);
+            }
+        });
+    }
 
     @Override
     public void playMove(Point p) {
