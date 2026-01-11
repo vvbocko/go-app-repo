@@ -94,9 +94,5 @@ public void onServerMessage(String msg) {
         String row = String.valueOf(p.y() + 1);
         return col + row;
     }
-
-    public void onBoardChanged() {
-        javafx.application.Platform.runLater(() -> gui.refresh());
-    }
 }
 

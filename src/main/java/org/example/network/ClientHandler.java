@@ -27,14 +27,12 @@ public class ClientHandler implements Runnable {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
-            // Nie wysyłamy koloru od razu!
             synchronized (this) {
                 while (session == null) {
                     wait();
                 }
             }
 
-            // Po ustawieniu sesji wszystko wysyłane przez GameSession
             String move;
             while ((move = in.readLine()) != null) {
                 session.handleMove(this, move);
@@ -47,7 +45,7 @@ public class ClientHandler implements Runnable {
 
     public synchronized void setSession(GameSession session) {
         this.session = session;
-        notify(); // budzimy wątek run()
+        notify(); 
     }
 
     public void sendToClient(String message) {

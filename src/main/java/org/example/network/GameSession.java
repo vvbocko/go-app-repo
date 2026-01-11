@@ -9,14 +9,12 @@ import org.example.Stone;
 public class GameSession {
     private ClientHandler black;
     private ClientHandler white;
-    private ClientHandler currentPlayer;
     private NetworkGameBridge bridge;
 
     public GameSession(ClientHandler black, ClientHandler white, NetworkGameBridge bridge){
         this.black = black;
         this.white = white;
         this.bridge = bridge;
-        this.currentPlayer = black;
 
         startGame();
     }
@@ -93,27 +91,21 @@ public class GameSession {
     private void displayBoard() {
         String boardAscii = bridge.getGameController().getBoardAscii();
 
-        black.sendToClient("BOARD_START");
-        white.sendToClient("BOARD_START");
-
         for (String line : boardAscii.split("\n")) {
             black.sendToClient(line);
             white.sendToClient(line);
         }
-
-        black.sendToClient("BOARD_END");
-        white.sendToClient("BOARD_END");
     }
 
     private void switchTurn() {
-        if (currentPlayer == black) {
-            currentPlayer = white;
-            black.sendToClient("Waiting for WHITE to play...");
-            white.sendToClient("Your turn.");
-        } else {
-            currentPlayer = black;
-            white.sendToClient("Waiting for BLACK to play...");
+        Stone current = bridge.getGameController().getCurrentPlayer();
+
+        if (current == Stone.BLACK) {
             black.sendToClient("Your turn.");
+            white.sendToClient("Waiting for BLACK...");
+        } else {
+            white.sendToClient("Your turn.");
+            black.sendToClient("Waiting for WHITE...");
         }
     }
 }
