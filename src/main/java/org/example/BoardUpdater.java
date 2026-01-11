@@ -1,13 +1,28 @@
 package org.example;
 
+/**
+ * Aktualizuje instancję Board na podstawie jej reprezentacji ASCII.
+ * Używane do synchronizacji stanu planszy w grze klient-server.
+ */
 public class BoardUpdater {
 
     private final Board board;
 
+    /**
+     * Tworzy nowy obiekt BoardUpdater dla wskazanej planszy.
+     *
+     * @param board plansza do aktualizacji
+     */
     public BoardUpdater(Board board) {
         this.board = board;
     }
 
+    /**
+     * Aktualizuje stan planszy na podstawie wersji ASCII.
+     * Parsuje ciąg znaków ASCII i ustawia odpowiednie kamienie na planszy.
+     *
+     * @param ascii reprezentacja ASCII planszy
+     */
     public void updateFromAscii(String ascii) {
         if (ascii == null || ascii.isBlank()) return;
         String[] lines = ascii.split("\n");
@@ -37,6 +52,4 @@ public class BoardUpdater {
             }
         }
     }
-
 }
-
