@@ -4,7 +4,7 @@ import org.example.NetworkGameBridge;
 import org.example.Point;
 import org.example.Score;
 import org.example.ScoreCalculator;
-import org.example.Stone;
+import org.example.Stone;;
 
 public class GameSession {
     private ClientHandler black;
