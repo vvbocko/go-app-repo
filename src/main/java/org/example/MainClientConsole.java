@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 import org.example.network.GameClient;
 
-public class MainClient {
+public class MainClientConsole {
     public static void main(String[] args){
         Scanner scanner = new Scanner(System.in);
         GameClient client = new GameClient();
