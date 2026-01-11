@@ -114,10 +114,16 @@ public class GameSession {
     private void displayBoard() {
         String boardAscii = bridge.getGameController().getBoardAscii();
 
+        black.sendToClient("BOARD_START");
+        white.sendToClient("BOARD_START");
+
         for (String line : boardAscii.split("\n")) {
             black.sendToClient(line);
             white.sendToClient(line);
         }
+
+        black.sendToClient("BOARD_END");
+        white.sendToClient("BOARD_END");
     }
 
     private void switchTurn() {
