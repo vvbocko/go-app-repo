@@ -27,13 +27,25 @@ public class GameSession {
 
         sendToBothClients("Game starts!");
         displayBoard();
+        sendCapturesUpdate();
 
         black.sendToClient("Your turn.");
         white.sendToClient("Waiting for BLACK to play...");
     }
+
     public synchronized void handleMove(ClientHandler client, String move) {
         if (client.stoneColor != bridge.getGameController().getCurrentPlayer()) {
             client.sendToClient("Wait for your turn.");
+            return;
+        }
+
+        if (move.equalsIgnoreCase("SURRENDER")) {
+            bridge.getGameController().surrender();
+
+            sendToBothClients("GAME_OVER");
+
+            Stone winner = bridge.getGameController().getSurrenderWinner();
+            sendToBothClients("WINNER:" + winner);
             return;
         }
 
@@ -49,14 +61,15 @@ public class GameSession {
                         bridge.getGameController()
                 );
 
-                sendToBothClients("GAME OVER");
-                sendToBothClients("BLACK: " + score.black());
-                sendToBothClients("WHITE: " + score.white());
+                sendToBothClients("GAME_OVER");
+                sendToBothClients("SCORE_BLACK:" + score.black());
+                sendToBothClients("SCORE_WHITE:" + score.white());
 
                 Stone winner = bridge.getGameController().getWinner(score);
-                sendToBothClients("Winner: " + winner);
+                sendToBothClients("WINNER:" + winner);
             } else {
                 displayBoard();
+                sendCapturesUpdate();
                 switchTurn();
             }
             return;
@@ -76,6 +89,7 @@ public class GameSession {
         switch (result) {
             case OK -> {
                 displayBoard();
+                sendCapturesUpdate();
                 switchTurn();
             }
             case OCCUPIED -> client.sendToClient("INVALID: cell occupied");
@@ -88,6 +102,13 @@ public class GameSession {
     private void sendToBothClients(String message) {
         black.sendToClient(message);
         white.sendToClient(message);
+    }
+
+    private void sendCapturesUpdate() {
+        int blackCaptures = bridge.getGameController().getBlackCaptures();
+        int whiteCaptures = bridge.getGameController().getWhiteCaptures();
+
+        sendToBothClients("CAPTURES:" + blackCaptures + "," + whiteCaptures);
     }
 
     private void displayBoard() {

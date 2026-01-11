@@ -15,6 +15,8 @@ public class NetworkGameAdapter implements GameAdapter, ServerMessageListener {
     private BoardUpdater boardUpdater;
     private boolean receivingBoard = false;
     private StringBuilder boardBuffer = new StringBuilder();
+    private String pendingBlackScore = "";
+    private String pendingWhiteScore = "";
 
 
     public NetworkGameAdapter(GameClient client, GameViewController gui) {
@@ -60,13 +62,37 @@ public void onServerMessage(String msg) {
             gui.setMyTurn(false);
             gui.setStatus(msg);
         }
-        else if (msg.startsWith("INVALID") || msg.startsWith("GAME OVER")) {
+        else if (msg.startsWith("CAPTURES:")) {
+            String[] parts = msg.substring(9).split(",");
+            int blackCaptures = Integer.parseInt(parts[0]);
+            int whiteCaptures = Integer.parseInt(parts[1]);
+            gui.setCapturesDisplay(blackCaptures, whiteCaptures);
+        }
+        else if (msg.equals("GAME_OVER")) {
+            gui.setMyTurn(false);
+            pendingBlackScore = "";
+            pendingWhiteScore = "";
+        }
+        else if (msg.startsWith("SCORE_BLACK:")) {
+            pendingBlackScore = "BLACK: " + msg.substring(12);
+        }
+        else if (msg.startsWith("SCORE_WHITE:")) {
+            pendingWhiteScore = "WHITE: " + msg.substring(12);
+        }
+        else if (msg.startsWith("WINNER:")) {
+            String winner = msg.substring(7);
+
+            if (!pendingBlackScore.isEmpty() && !pendingWhiteScore.isEmpty()) {
+                gui.showGameOver(pendingBlackScore, pendingWhiteScore, "Winner: " + winner);
+            } else {
+                gui.showMessage("GAME OVER\nWinner: " + winner);
+            }
+        }
+        else if (msg.startsWith("INVALID")) {
             gui.showMessage(msg);
         }
     });
 }
-
-
 
     @Override
     public void playMove(Point p) {
@@ -84,6 +110,10 @@ public void onServerMessage(String msg) {
         client.sendMessage("PASS");
     }
 
+    public void surrender() {
+        client.sendMessage("SURRENDER");
+    }
+
     @Override
     public Stone getColor() {
         return playerColor;
@@ -99,4 +129,3 @@ public void onServerMessage(String msg) {
         javafx.application.Platform.runLater(() -> gui.refresh());
     }
 }
-

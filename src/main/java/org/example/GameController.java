@@ -70,6 +70,16 @@ public class GameController  {
         return MoveResult.PASS;
     }
 
+    public MoveResult surrender() {
+        passCounter = 0;
+        notifyListeners();
+        return MoveResult.SURRENDER;
+    }
+
+    public Stone getSurrenderWinner() {
+        return currentPlayer.opposite();
+    }
+
     public String getBoardAscii() {
         return board.toAscii();
     }

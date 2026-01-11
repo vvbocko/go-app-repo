@@ -13,9 +13,11 @@ import javafx.scene.layout.VBox;
 public class GameViewController {
 
     private static final int BOARD_SIZE = 9;
-    private NetworkGameAdapter gameAdapter; 
+    private NetworkGameAdapter gameAdapter;
     private final BorderPane root;
     private final Label statusLabel;
+    private final Label blackCapturesLabel;
+    private final Label whiteCapturesLabel;
     private final Board board;
     private final BoardView boardView;
     private boolean myTurn = false;
@@ -24,13 +26,18 @@ public class GameViewController {
         board = new Board(BOARD_SIZE);
         boardView = new BoardView(board);
         statusLabel = new Label("Waiting for opponent...");
+        blackCapturesLabel = new Label("BLACK captures: 0");
+        whiteCapturesLabel = new Label("WHITE captures: 0");
 
         boardView.setOnBoardClick(this::handleBoardClick);
 
         Button passButton = new Button("PASS");
         passButton.setOnAction(e -> handlePass());
 
-        VBox rightPanel = new VBox(15, statusLabel, passButton);
+        Button surrenderButton = new Button("SURRENDER");
+        surrenderButton.setOnAction(e -> handleSurrender());
+
+        VBox rightPanel = new VBox(15, statusLabel, blackCapturesLabel, whiteCapturesLabel, passButton, surrenderButton);
 
         root = new BorderPane();
         root.setCenter(boardView.getCanvas());
@@ -45,11 +52,27 @@ public class GameViewController {
         gameAdapter.pass();
     }
 
+    private void handleSurrender() {
+        gameAdapter.surrender();
+    }
+
     public void showMessage(String text) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(null);
         alert.setContentText(text);
         alert.show();
+    }
+
+    public void showGameOver(String blackScore, String whiteScore, String winner) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Over");
+        alert.setHeaderText("Game Over!");
+        alert.setContentText(
+                blackScore + "\n" +
+                        whiteScore + "\n\n" +
+                        winner
+        );
+        alert.showAndWait();
     }
 
     public BorderPane getRoot() {
@@ -63,7 +86,7 @@ public class GameViewController {
     public Board getBoard() {
         return board;
     }
-    
+
     public void setMyTurn(boolean value) {
         myTurn = value;
     }
@@ -78,6 +101,11 @@ public class GameViewController {
 
     public void setStatus(String text) {
         statusLabel.setText(text);
+    }
+
+    public void setCapturesDisplay(int blackCaptures, int whiteCaptures) {
+        blackCapturesLabel.setText("BLACK captures: " + blackCaptures);
+        whiteCapturesLabel.setText("WHITE captures: " + whiteCaptures);
     }
 
     public void setAdapter(NetworkGameAdapter gameAdapter) {
