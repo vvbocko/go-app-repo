@@ -6,19 +6,43 @@ import org.example.Point;
 import org.example.Stone;
 import org.example.ui.GameViewController;
 
+
+/**
+ * Adapter gry sieciowej.
+ * Odpowiada za komunikację pomiędzy klientem sieciowym a interfejsem graficznym,
+ * tłumacząc zdarzenia GUI na komunikaty sieciowe oraz komunikaty serwera
+ * na aktualizacje stanu gry.
+ */
 public class NetworkGameAdapter implements GameAdapter, ServerMessageListener {
 
+    /** Klient sieciowy odpowiedzialny za komunikację z serwerem */
     private final GameClient client;
+    /** Kolor kamieni przypisany graczowi */
     private Stone playerColor;
+    /** Plansza */
     private final Board board;
+    /** Kontroler interfejsu graficznego gry */
     private final GameViewController gui;
+    /** Narzędzie do aktualizacji planszy na podstawie danych tekstowych */
     private BoardUpdater boardUpdater;
+    /** Flaga informująca o odbieraniu danych planszy z serwera */
     private boolean receivingBoard = false;
+    /** Bufor przechowujący tekstową reprezentację planszy */
     private StringBuilder boardBuffer = new StringBuilder();
+    /** Tymczasowy wynik punktowy gracza czarnego */
     private String pendingBlackScore = "";
+    /** Tymczasowy wynik punktowy gracza białego */
     private String pendingWhiteScore = "";
 
 
+    /**
+     * Tworzy adapter gry sieciowej.
+     * Rejestruje obiekt jako nasłuchujący komunikatów serwera
+     * oraz inicjalizuje lokalną planszę gry.
+     *
+     * @param client klient sieciowy
+     * @param gui kontroler interfejsu graficznego
+     */
     public NetworkGameAdapter(GameClient client, GameViewController gui) {
         this.client = client;
         this.gui = gui;
@@ -28,6 +52,14 @@ public class NetworkGameAdapter implements GameAdapter, ServerMessageListener {
         client.setServerMessageListener(this);
     }
 
+
+    /**
+     * Obsługuje komunikaty przychodzące z serwera.
+     * Metoda aktualizuje stan planszy, interfejs użytkownika
+     * oraz informacje o przebiegu rozgrywki.
+     *
+     * @param msg wiadomość otrzymana z serwera
+     */
     @Override
     public void onServerMessage(String msg) {
         javafx.application.Platform.runLater(() -> {
@@ -94,6 +126,13 @@ public class NetworkGameAdapter implements GameAdapter, ServerMessageListener {
         });
     }
 
+
+    /**
+     * Wysyła do serwera informację o ruchu gracza.
+     * Ruch jest wysyłany tylko wtedy, gdy aktualnie jest tura gracza.
+     *
+     * @param p punkt, w którym gracz chce postawić kamień
+     */
     @Override
     public void playMove(Point p) {
         if (!gui.isMyTurn()) {
@@ -105,20 +144,42 @@ public class NetworkGameAdapter implements GameAdapter, ServerMessageListener {
         client.sendMessage(move);
     }
 
+
+    /**
+     * Wysyła do serwera informację o pasie gracza.
+     */
     @Override
     public void pass() {
         client.sendMessage("PASS");
     }
 
+
+    /**
+     * Wysyła do serwera informację o poddaniu gry przez gracza.
+     */
     public void surrender() {
         client.sendMessage("SURRENDER");
     }
 
+
+    /**
+     * Zwraca kolor kamieni przypisany graczowi.
+     *
+     * @return kolor kamieni gracza
+     */
     @Override
     public Stone getColor() {
         return playerColor;
     }
 
+
+    /**
+     * Konwertuje punkt planszy na reprezentację tekstową
+     * zgodną z protokołem komunikacyjnym serwera (np. A1, C5).
+     *
+     * @param p punkt planszy
+     * @return tekstowa reprezentacja punktu
+     */
     private String convertPoint(Point p) {
         char col = (char)('A' + p.x());
         String row = String.valueOf(p.y() + 1);

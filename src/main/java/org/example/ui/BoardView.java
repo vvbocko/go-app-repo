@@ -11,21 +11,39 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+
+/**
+ * Graficzna reprezentacja planszy do gry w Go.
+ * Odpowiada za rysowanie siatki, kamieni oraz obsługę kliknięć użytkownika.
+ */
 public class BoardView implements GameStateListener {
-
+    /** Rozmiar płótna planszy w pikselach */
     private static final int CANVAS_SIZE = 600;
-
+    /** Model planszy gry */
     private final Board board;
+    /** Płótno JavaFX, na którym rysowana jest plansza */
     private final Canvas canvas;
+    /** Rozmiar pojedynczej komórki planszy w pikselach */
     private final double cell;
-
+    /** Obsługa kliknięć na planszy */
     private Consumer<Point> clickHandler;
 
+
+    /**
+     * Reaguje na zmianę stanu gry.
+     * Powoduje ponowne narysowanie planszy.
+     */
     @Override
     public void onGameStateChanged() {
         draw();
     }
 
+
+    /**
+     * Tworzy widok planszy dla podanego modelu.
+     *
+     * @param board model planszy gry
+     */
     public BoardView(Board board) {
         this.board = board;
         this.canvas = new Canvas(CANVAS_SIZE, CANVAS_SIZE);
@@ -35,14 +53,34 @@ public class BoardView implements GameStateListener {
         draw();
     }
 
+
+    /**
+     * Zwraca płótno, na którym rysowana jest plansza.
+     *
+     * @return obiekt Canvas
+     */
     public Canvas getCanvas() {
         return canvas;
     }
 
+
+    /**
+     * Ustawia obsługę kliknięć użytkownika na planszy.
+     *
+     * @param handler funkcja wywoływana po kliknięciu pola planszy
+     */
     public void setOnBoardClick(Consumer<Point> handler) {
         this.clickHandler = handler;
     }
 
+
+    /**
+     * Obsługuje kliknięcie myszą na planszy.
+     * Przelicza współrzędne pikselowe na współrzędne planszy.
+     *
+     * @param mouseX współrzędna X kliknięcia
+     * @param mouseY współrzędna Y kliknięcia
+     */
     private void handleClick(double mouseX, double mouseY) {
         int x = (int) Math.round(mouseX / cell) - 1;
         int y = (int) Math.round(mouseY / cell) - 1;
@@ -56,6 +94,10 @@ public class BoardView implements GameStateListener {
         }
     }
 
+
+    /**
+     * Rysuje całą planszę gry.
+     */
     public void draw() {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
@@ -66,6 +108,12 @@ public class BoardView implements GameStateListener {
         drawStones(gc);
     }
 
+
+    /**
+     * Rysuje siatkę planszy.
+     *
+     * @param gc kontekst graficzny
+     */
     private void drawGrid(GraphicsContext gc) {
         gc.setStroke(Color.BLACK);
 
@@ -75,6 +123,12 @@ public class BoardView implements GameStateListener {
         }
     }
 
+
+    /**
+     * Rysuje kamienie znajdujące się na planszy.
+     *
+     * @param gc kontekst graficzny
+     */
     private void drawStones(GraphicsContext gc) {
         for (int x = 0; x < board.getSize(); x++) {
             for (int y = 0; y < board.getSize(); y++) {

@@ -10,17 +10,38 @@ import java.util.List;
 import org.example.NetworkGameBridge;
 import org.example.Stone;
 
-public class GameServer {
 
+/**
+ * Serwer gry Go.
+ * Odpowiada za przyjmowanie połączeń klientów,
+ * przypisywanie im kolorów oraz inicjalizowanie sesji gry.
+ */
+public class GameServer {
+    /** Numer portu, na którym działa serwer */
     private int port;
+    /** Most łączący logikę gry z warstwą sieciową */
     private NetworkGameBridge bridge;
+    /** Lista aktualnie podłączonych klientów */
     private List<ClientHandler> clients = new ArrayList<>();
 
+
+
+    /**
+     * Tworzy nowy serwer gry.
+     *
+     * @param port numer portu serwera
+     * @param bridge obiekt pośredniczący między serwerem a logiką gry
+     */
     public GameServer(int port, NetworkGameBridge bridge) {
         this.port = port;
         this.bridge = bridge;
     }
 
+
+    /**
+     * Uruchamia serwer i rozpoczyna nasłuchiwanie połączeń klientów.
+     * Po podłączeniu dwóch graczy tworzona jest nowa sesja gry.
+     */
     public void start() {
         System.out.println("Server listening on port " + port);
 

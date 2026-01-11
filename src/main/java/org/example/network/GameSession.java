@@ -6,11 +6,28 @@ import org.example.Score;
 import org.example.ScoreCalculator;
 import org.example.Stone;;
 
+
+/**
+ * Reprezentuje pojedynczą sesję gry pomiędzy dwoma graczami.
+ * Odpowiada za obsługę ruchów, synchronizację stanu gry
+ * oraz komunikację z klientami.
+ */
 public class GameSession {
+    /** Klient grający czarnymi */
     private ClientHandler black;
+    /** Klient grający białymi */
     private ClientHandler white;
+    /** Most łączący sesję z logiką gry */
     private NetworkGameBridge bridge;
 
+
+    /**
+     * Tworzy nową sesję gry dla dwóch graczy.
+     *
+     * @param black klient grający czarnymi
+     * @param white klient grający białymi
+     * @param bridge pośrednik logiki gry
+     */
     public GameSession(ClientHandler black, ClientHandler white, NetworkGameBridge bridge){
         this.black = black;
         this.white = white;
@@ -19,6 +36,10 @@ public class GameSession {
         startGame();
     }
 
+
+    /**
+     * Inicjalizuje grę i wysyła informacje początkowe do graczy.
+     */
     private void startGame(){
         black.sendToClient("You are playing as: BLACK");
         white.sendToClient("You are playing as: WHITE");
@@ -31,6 +52,15 @@ public class GameSession {
         white.sendToClient("Waiting for BLACK to play...");
     }
 
+
+    /**
+     * Obsługuje ruch przesłany przez klienta.
+     * Metoda waliduje ruch, aktualizuje stan gry
+     * oraz wysyła odpowiednie komunikaty do graczy.
+     *
+     * @param client klient wykonujący ruch
+     * @param move ruch w postaci tekstowej
+     */
     public synchronized void handleMove(ClientHandler client, String move) {
 
         if (move.equalsIgnoreCase("SURRENDER")) {
@@ -99,11 +129,21 @@ public class GameSession {
         }
     }
 
+
+    /**
+     * Wysyła komunikat do obu graczy.
+     *
+     * @param message treść wiadomości
+     */
     private void sendToBothClients(String message) {
         black.sendToClient(message);
         white.sendToClient(message);
     }
 
+
+    /**
+     * Wysyła do graczy aktualną liczbę zbitych kamieni.
+     */
     private void sendCapturesUpdate() {
         int blackCaptures = bridge.getGameController().getBlackCaptures();
         int whiteCaptures = bridge.getGameController().getWhiteCaptures();
@@ -111,6 +151,10 @@ public class GameSession {
         sendToBothClients("CAPTURES:" + blackCaptures + "," + whiteCaptures);
     }
 
+
+    /**
+     * Wysyła do graczy aktualny stan planszy w postaci ASCII.
+     */
     private void displayBoard() {
         String boardAscii = bridge.getGameController().getBoardAscii();
 
@@ -126,6 +170,10 @@ public class GameSession {
         white.sendToClient("BOARD_END");
     }
 
+
+    /**
+     * Przełącza turę pomiędzy graczami i informuje ich o stanie gry.
+     */
     private void switchTurn() {
         Stone current = bridge.getGameController().getCurrentPlayer();
 

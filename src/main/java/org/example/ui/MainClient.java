@@ -8,8 +8,21 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+
+/**
+ * Główna klasa uruchamiająca klienta gry.
+ * Inicjalizuje połączenie z serwerem, interfejs graficzny
+ * oraz rozpoczyna nasłuchiwanie komunikatów sieciowych.
+ */
 public class MainClient extends Application {
 
+
+    /**
+     * Metoda startowa aplikacji.
+     * Tworzy klienta sieciowego, widok gry oraz adapter komunikacji.
+     *
+     * @param stage główne okno aplikacji
+     */
     @Override
     public void start(Stage stage) {
         GameClient client = new GameClient();
@@ -29,6 +42,12 @@ public class MainClient extends Application {
         client.startListening();
     }
 
+
+    /**
+     * Punkt wejścia aplikacji klienckiej.
+     *
+     * @param args argumenty linii poleceń
+     */
     public static void main(String[] args) {
         launch();
     }
