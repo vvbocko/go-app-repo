@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>4</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>156</x>
+      <y>324</y>
+      <w>76</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>MainClient
+--
+--
++ start(stage: Stage) : void
++ main(args: String[]) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>252</x>
+      <y>132</y>
+      <w>132</w>
+      <h>188</h>
+    </coordinates>
+    <panel_attributes>GameViewController
+--
+- BOARD_SIZE = 9 : int
+- gameAdapter: NetworkGameAdapter
+- root: BorderPane
+- statusLabel: Label
+- blackCapturesLabel: Label
+- whiteCapturesLabel: Label
+- board: Board
+- boardView: BoardView
+- myTurn = false : boolean
+--
++ GameViewController()
+- handleBoardClick(point: Point) : void
+- handlePass() : void
+- handleSurrender() : void
++ showMessage(text: String) : void
++ showGameOver(blackScore: String, 
+   whiteScore: String, winner: String) : void
++ getRoot() : BorderPane
++ getBoardView() : BoardView
++ getBoard() : Board
++ setMyTurn(value: boolean) : void
++ isMyTurn() : boolean
++ refresh() : void
++ setStatus(text: String) : void
++ setCapturesDisplay(blackCaptures: int, 
+    whiteCaptures: int) : void
++ setAdapter(gameAdapter: NetworkGameAdapter) 
+     : void
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>216</x>
+      <y>432</y>
+      <w>164</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>BoardView
+--
+- CANVAS_SIZE = 600 : int
+- board: Board
+- canvas: Canvas
+- cell: double
+- clickHandler: Consumer&lt;Point&gt;
+--
++ onGameStateChanged() : void
++ BoardView(board: Board)
++ getCanvas() : Canvas
++ senOnBoardClick(handler: Consumer&lt;Point&gt;) : void
+- handleClick(mouseX: double, mouseY: double) : void
++ draw() : void
+- drawGrid(gc: GraphicsContext) : void
+- drawStones(gc: GraphicsContext) : void
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>400</x>
+      <y>324</y>
+      <w>116</w>
+      <h>124</h>
+    </coordinates>
+    <panel_attributes>NetworkGameAdapter
+--
+- client: GameClient
+- playerColor: Stone
+- board: Board
+- gui: GameViewController
+- boardUpdater: BoardUpdater
+- receivingBoard = false : boolean
+- boardBuffer: StringBuilder
+- pendingBlackScore: String
+- pendingWhiteScore: String
+--
++ NetworkGameAdapter(client: GameClient, 
+   gui GameViewController)
++ onServerMessage(msg: String) : void
++ playMove(p: Point) : void
++ pass() : void
++ surrender() : void
++ getColor() : Stone
+- convertPoint(p: Point) : String
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>276</x>
+      <y>372</y>
+      <w>60</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>
+Board
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>200</x>
+      <y>380</y>
+      <w>60</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>
+Point
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>228</x>
+      <y>316</y>
+      <w>36</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;60.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>372</x>
+      <y>316</y>
+      <w>36</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>70.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>344</x>
+      <y>316</y>
+      <w>32</w>
+      <h>124</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;290.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>304</x>
+      <y>316</y>
+      <w>16</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;140.0;20.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>292</x>
+      <y>392</y>
+      <w>20</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>236</x>
+      <y>400</y>
+      <w>12</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>236</x>
+      <y>316</y>
+      <w>60</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;160.0;130.0;10.0</additional_attributes>
+  </element>
+</diagram>

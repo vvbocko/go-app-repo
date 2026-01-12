@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>0</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Board
+--
+- grid: Stone[][]
+- size: int
+- previousGrid: Stone[][]
+- lastCapturedCount = 0 : int
+--
++ Board(size: int)
+- isEmpty(point Point) : boolean
+- getNeighbours(point: Point) : List&lt;Point&gt;
+- getGroup(startPoint) : List&lt;Point&gt;
+- countBreaths(group: List&lt;Point&gt;) : int
+- removeGroup(group: List&lt;Point&gt;) : int
++ placeStone(point: Point, stone: Stone) : MoveResult
++ setStone(p: Point, stone: Stone) : void
+- getEmptyArea(startPoint: Point) : List&lt;Point&gt;
+- getBorderColors(area: List&lt;Point&gt;) : Set&lt;Stone&gt;
++ calculateTerritory() : TerritoryCount
+- copyGrid : Stone[][]
+- gridsEqual(a: Stone[][], b: Stone[][]) : boolean
++ clearKo() : void
++ getSize() : int
++ getStone(p: Point) : Stone
++ getLastCapturedCount() : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>240</x>
+      <y>0</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;record&gt;&gt; Point
+--
++ x: int
++ y: int
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>240</x>
+      <y>190</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Move
+--
+- x: int
+- y: int
+- color: Stone
+--
++ Move(x: int, y: int, color: Stone) 
++ getX() : int
++ getY() : int
++ getColor() : Stone</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>190</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Stone
+--
+BLACK
+WHITE 
+NONE
+--
++ opposite() : Stone
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>380</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>MoveResult
+--
+OK 
+OCCUPIED 
+SUICIDE
+PASS 
+GAMEOVER
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>240</x>
+      <y>380</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;record&gt;&gt; TerritoryCount
+--
++ black: int
++ white: int
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>150</x>
+      <y>570</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;record&gt;&gt; Score
+--
++ black: int
++ white: int
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
